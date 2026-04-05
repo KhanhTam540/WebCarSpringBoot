@@ -1,0 +1,67 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: weboto_db
+    environment:
+      MYSQL_ROOT_PASSWORD: sqlroot
+      MYSQL_DATABASE: car_parts_db
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-psqlroot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Thêm dịch vụ phpMyAdmin tại đây
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: weboto_phpmyadmin
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      MYSQL_ROOT_PASSWORD: sqlroot
+    ports:
+      - "8081:80" # Bạn có thể truy cập qua cổng 8081
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: ./weboto
+      dockerfile: Dockerfile
+    container_name: weboto_backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/car_parts_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: sqlroot
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+#  frontend:
+#    image: nginx:1.27-alpine
+#    container_name: weboto_frontend
+#    ports:
+#      - "4173:80"
+#    volumes:
+#      - ../frontend:/usr/share/nginx/html:ro
+#      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+#    depends_on:
+#      backend:
+#        condition: service_started
+
+volumes:
+  db_data:

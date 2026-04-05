@@ -1,0 +1,34 @@
+# --- Maven ---
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# Loại bỏ wrapper jar nếu bạn không muốn đẩy lên, 
+# nhưng thường thì nên giữ lại maven-wrapper.jar để người kia chạy được mvnw.
+# !.mvn/wrapper/maven-wrapper.jar
+
+# --- IDE (IntelliJ, VS Code, Eclipse) ---
+.idea/
+*.iml
+*.iws
+.project
+.settings/
+.classpath
+.factorypath
+.vscode/
+
+# --- Cấu hình nhạy cảm (Quan trọng) ---
+# Không đẩy mật khẩu database hoặc mã bí mật email lên GitHub[cite: 100].
+src/main/resources/application.properties
+src/main/resources/application.yml
+.env
+
+# --- Hệ điều hành & Logs ---
+*.log
+.DS_Store
+Thumbs.db

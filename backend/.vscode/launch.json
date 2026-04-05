@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-WebotoApplication<weboto>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "Nhom21.weboto.WebotoApplication",
+            "projectName": "weboto",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
